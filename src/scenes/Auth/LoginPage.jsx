@@ -26,27 +26,54 @@ const LoginPage = () => {
           email,
           password,
       }
-      axios.post(AppURL.UserLogin,data).then(response => {
-          localStorage.setItem('token',response.data.token);
-          localStorage.setItem('user', JSON.stringify(response.data.user));
+      const admin ={
+          tobeemail: "test@admin.com",
+          tobepassword: "123456",
+          role: "admin"
+      }
+      const staff ={
+          tobeemail: "test@staff.com",
+          tobepassword: "123456",
+          role: "staff"
+      }
+
+        if(data.email===admin.tobeemail){
+            let token = 123456;
+          localStorage.setItem('user', JSON.stringify(admin));
+          localStorage.setItem('token',token);
           setLoggedIn(true);
-          e.target.reset();
-      }).catch(error => {
-        toast.error(error.response.data.message, {
-            position: "top-right"   
-        });
-      });
+        }else if(data.email===staff.tobeemail){
+            let token = 123456;
+          localStorage.setItem('user', JSON.stringify(staff));
+          localStorage.setItem('token',token);
+          setLoggedIn(true);
+        }else{
+            toast.error("invalid email", {
+                        position: "top-right"   
+                    });
+        }
+
+    //   axios.post(AppURL.UserLogin,data).then(response => {
+    //       localStorage.setItem('token',response.data.token);
+    //       localStorage.setItem('user', JSON.stringify(response.data.user));
+    //       setLoggedIn(true);
+    //       e.target.reset();
+    //   }).catch(error => {
+    //     toast.error(error.response.data.message, {
+    //         position: "top-right"   
+    //     });
+    //   });
   }
   
-  if(loggedIn){
-      return <Navigate to={"/"} />
-   }else{
+    if(loggedIn){
+        return <Navigate to={"/"} />
+    }else{
 
-   }
+    }
 
-  if(localStorage.getItem('token')){
-      return <Navigate to="/" />
-  }
+    if(localStorage.getItem('token')){
+        return <Navigate to="/" />
+    }
 
   return (
       <Fragment>
