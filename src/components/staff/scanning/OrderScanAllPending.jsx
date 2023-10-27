@@ -7,8 +7,13 @@ import { tokens } from '../../../theme';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import axios from 'axios';
 import AppURL from '../../../api/AppURL';
+import StatBox from '../../StatBox';
+import EmailIcon from "@mui/icons-material/Email";
+import PointOfSaleIcon from "@mui/icons-material/PointOfSale";
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import TrafficIcon from "@mui/icons-material/Traffic";
 
-const OrderScanAll = () => {
+const OrderScanAllPending = () => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     const data =  JSON.parse(localStorage.getItem('user'));
@@ -17,7 +22,7 @@ const OrderScanAll = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(()=>{
-        axios.get(AppURL.UserAllScan(firm))
+        axios.get(AppURL.UserAllScanPending(firm))
         .then(response => {
           setScanData(response.data);
           setLoading(false);
@@ -124,26 +129,101 @@ const OrderScanAll = () => {
           },
         }}
       >
+      <Box
+        display="grid"
+        gridTemplateColumns="repeat(12, 1fr)"
+        gridAutoRows="140px"
+        gap="20px"
+      >
+        <Box
+          gridColumn="span 3"
+          backgroundColor={colors.primary[400]}
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+        >
+          <StatBox
+            title="12,361"
+            subtitle="Emails Sent"
+            progress="0.75"
+            increase="+14%"
+            icon={
+              <EmailIcon
+                sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
+              />
+            }
+          />
+        </Box>
+        <Box
+          gridColumn="span 3"
+          backgroundColor={colors.primary[400]}
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+        >
+          <StatBox
+            title="431,225"
+            subtitle="Sales Obtained"
+            progress="0.50"
+            increase="+21%"
+            icon={
+              <PointOfSaleIcon
+                sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
+              />
+            }
+          />
+        </Box>
+        <Box
+          gridColumn="span 3"
+          backgroundColor={colors.primary[400]}
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+        >
+          <StatBox
+            title="32,441"
+            subtitle="New Clients"
+            progress="0.30"
+            increase="+5%"
+            icon={
+              <PersonAddIcon
+                sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
+              />
+            }
+          />
+        </Box>
+        <Box
+          gridColumn="span 3"
+          backgroundColor={colors.primary[400]}
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+        >
+          <StatBox
+            title="1,325,134"
+            subtitle="Traffic Received"
+            progress="0.80"
+            increase="+43%"
+            icon={
+              <TrafficIcon
+                sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
+              />
+            }
+          />
+        </Box>
+      </Box>
         <DataGrid
-          slots={{ Toolbar: GridToolbar }}
+         slots={{ Toolbar: GridToolbar }}
           loading={loading}
           rows={scanData}
           columns={columns}
           components={{ Toolbar: GridToolbar  }}
           {...scanData}
-          initialState={{
-          sorting: {
-            sortModel: [{ field: 'updated_at', sort: 'desc' }],
-            },
-          }}
-          columnVisibilityModel={{
-            updated_at: false,
-          }}
         />
       </Box>
       </Container>
-        </Fragment>
+    </Fragment>
     )
 }
 
-export default OrderScanAll
+export default OrderScanAllPending

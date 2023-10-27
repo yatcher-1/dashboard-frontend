@@ -1,4 +1,27 @@
+import axios from "axios";
 import { tokens } from "../theme";
+import AppURL from "../api/AppURL";
+import { useEffect, useState } from "react";
+
+export const ScanData = () => {
+  const [scanData, setScanData] = useState({});
+
+  const data =  JSON.parse(localStorage.getItem('user'));
+    const firm = data.firm;
+
+    useEffect(()=>{
+      axios.get(AppURL.UserAllScan(firm)).then(response => {
+            setScanData(response.data);
+    }).catch(error => {
+  
+    });
+    }, [])
+
+    
+
+    return scanData;
+}
+
 
 export const mockDataTeam = [
   {

@@ -20,6 +20,7 @@ import { useEffect } from 'react'
 import axios from 'axios'
 import AppURL from '../api/AppURL'
 import { useState } from 'react'
+import OrderScanMain from '../components/staff/scanning/OrderScanMain'
 
 function AppRoute(){
     const [theme, colorMode] = useMode();   
@@ -33,7 +34,7 @@ function AppRoute(){
         }).catch(error => {
       
         });
-    });
+    }, []);
 
     return (
     <ColorModeContext.Provider value={colorMode}>
@@ -46,6 +47,10 @@ function AppRoute(){
               <Route exact path="/register" element={<RegisterPage />} />
               <Route exact path="/" element={<HomePage user={user}/>} />
               <Route exact path="/team" element={<Team />} />
+              <Route exact path="/orderscanning" element={<OrderScanMain />} />
+              <Route exact path="/orderpending" element={<OrderScanMain />} />
+              <Route exact path="/orderscanned" element={<OrderScanMain />} />
+              <Route exact path="/allorder" element={<OrderScanMain />} />
               <Route exact path="/contacts" element={<Contacts />} />
               <Route exact path="/invoices" element={<Invoices />} />
               <Route exact path="/profile" element={<Profile />} />

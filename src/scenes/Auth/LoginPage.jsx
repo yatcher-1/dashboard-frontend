@@ -7,6 +7,9 @@ import axios from 'axios';
 import AppURL from '../../api/AppURL';
 import { Link, Navigate } from 'react-router-dom';
 import { Button, Col, Container, Form, Row } from 'react-bootstrap';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const LoginPage = () => {
   const theme = useTheme();
@@ -29,7 +32,9 @@ const LoginPage = () => {
           setLoggedIn(true);
           e.target.reset();
       }).catch(error => {
-          
+        toast.error(error.response.data.message, {
+            position: "top-right"   
+        });
       });
   }
   
@@ -54,7 +59,7 @@ const LoginPage = () => {
       fontWeight="bold"
       color={colors.greenAccent[500]}
       >
-      CLient Login Page
+      Client Login Page
       </Typography>
       </Box>
 
@@ -86,6 +91,7 @@ const LoginPage = () => {
       </Col>
   </Row>
 </Container>
+<ToastContainer />
 </Fragment>
   )
 }

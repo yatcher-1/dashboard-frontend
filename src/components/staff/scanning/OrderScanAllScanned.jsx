@@ -8,7 +8,8 @@ import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import axios from 'axios';
 import AppURL from '../../../api/AppURL';
 
-const OrderScanAll = () => {
+
+const OrderScanAllScanned = () => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     const data =  JSON.parse(localStorage.getItem('user'));
@@ -16,8 +17,9 @@ const OrderScanAll = () => {
     const [scanData, setScanData] = useState([]);
     const [loading, setLoading] = useState(true);
 
+
     useEffect(()=>{
-        axios.get(AppURL.UserAllScan(firm))
+        axios.get(AppURL.UserAllScanScanned(firm))
         .then(response => {
           setScanData(response.data);
           setLoading(false);
@@ -86,6 +88,13 @@ const OrderScanAll = () => {
           flex: 1,
           cellClassName: "name-column--cell",
         },
+        {
+          field: "updated_at",
+          headerName: "Updated-At",
+          flex: 2,
+          cellClassName: "name-column--cell",
+          hideable: true,
+        },
       ];
     
     return (
@@ -146,4 +155,4 @@ const OrderScanAll = () => {
     )
 }
 
-export default OrderScanAll
+export default OrderScanAllScanned

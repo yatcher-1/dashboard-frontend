@@ -12,6 +12,7 @@ import AppURL from '../../api/AppURL';
 import { useEffect } from 'react';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import { ToastContainer, toast } from 'react-toastify';
 
 const RegisterPage = () => {
     const theme = useTheme();
@@ -79,7 +80,9 @@ const RegisterPage = () => {
             setLoggedIn(true);
             e.target.reset();
         }).catch(error => {
-            
+            toast.error(error.response.data.message, {
+                position: "top-right"   
+            });
         }, []);
     }
     
@@ -180,6 +183,7 @@ const RegisterPage = () => {
         </Col>
     </Row>
 </Container>
+<ToastContainer />
 </Fragment>
 
     )

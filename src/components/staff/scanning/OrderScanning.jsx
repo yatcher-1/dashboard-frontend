@@ -1,14 +1,16 @@
 import React, { Fragment, useEffect, useState } from 'react'
 import { Navigate } from 'react-router-dom';
-import { Box } from '@mui/material';
-import { Container } from 'react-bootstrap';
+import { Box, LinearProgress, TextField, Typography } from '@mui/material';
+import { Col, Container, Row } from 'react-bootstrap';
 import { useTheme } from '@emotion/react';
 import { tokens } from '../../../theme';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import axios from 'axios';
 import AppURL from '../../../api/AppURL';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-const OrderScanAll = () => {
+const OrderScanning = () => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     const data =  JSON.parse(localStorage.getItem('user'));
@@ -17,19 +19,44 @@ const OrderScanAll = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(()=>{
-        axios.get(AppURL.UserAllScan(firm))
+        GetData();
+    }, [])
+
+    const GetData = () => {
+      axios.get(AppURL.UserAllScanScanned(firm))
         .then(response => {
           setScanData(response.data);
           setLoading(false);
         })
         .catch(error => {
-  
+          toast.error(error.response.data.message, {
+            position: "top-right"
         });
-    }, [])
+        });
+    }
+
 
     if(!localStorage.getItem('token')){
         return <Navigate to="/login" />
     }
+
+    const handleChange = async (e) => {
+      let awb = e.target.value;
+      let data = {
+        firm,
+        awb,
+      }
+      await axios.post(AppURL.UserScanning,data)
+      .then(response => {
+        e.target.value="";
+        let dataPost = response.data;
+        setScanData(dataPost.scan);
+      })
+      .catch(error => {
+        
+      });
+    }
+
 
     const columns = [
         {
@@ -86,11 +113,34 @@ const OrderScanAll = () => {
           flex: 1,
           cellClassName: "name-column--cell",
         },
+        {
+          field: "updated_at",
+          headerName: "Updated-At",
+          flex: 2,
+          cellClassName: "name-column--cell",
+          hideable: true,
+        },
       ];
     
     return (
     <Fragment>
         <Container>
+          <Row>
+
+          <Col lg={12}>
+              <Container className='d-flex justify-content-center'>
+              <Typography
+              variant="h6"
+              color={colors.grey[300]}
+              sx={{ p: "15px 10px 5px 20px" }}
+            >
+              Scan Order
+            </Typography>
+            <TextField onChange={handleChange} id="outlined-basic" label="Scan Here..." variant="outlined" autoFocus/>
+            </Container>
+          </Col>
+
+          <Col lg={12}>
           <Box
         p="48px 32px"
         height="100vh"
@@ -141,9 +191,12 @@ const OrderScanAll = () => {
           }}
         />
       </Box>
+      </Col>
+      </Row>
       </Container>
-        </Fragment>
+      <ToastContainer />
+      </Fragment>
     )
 }
 
-export default OrderScanAll
+export default OrderScanning
